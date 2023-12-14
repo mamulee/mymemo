@@ -18,8 +18,15 @@ class MyApp extends StatelessWidget {
 }
 
 // 홈 페이지
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List<String> memoList = ['장보기 목록: 사과, 양파', '새 메모']; // 전체 메모 목록
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +34,33 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text("mymemo"),
       ),
-      body: Center(child: Text("메모를 작성해주세요")),
+      body: memoList.isEmpty
+          ? Center(child: Text("메모를 작성해 주세요"))
+          : ListView.builder(
+              itemCount: memoList.length, // memoList 개수 만큼 보여주기
+              itemBuilder: (context, index) {
+                String memo = memoList[index]; // index에 해당하는 memo 가져오기
+                return ListTile(
+                  // 메모 고정 아이콘
+                  leading: IconButton(
+                    icon: Icon(CupertinoIcons.pin),
+                    onPressed: () {
+                      print('$memo : pin 클릭 됨');
+                    },
+                  ),
+                  // 메모 내용 (최대 3줄까지만 보여주도록)
+                  title: Text(
+                    memo,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  onTap: () {
+                    // 아이템 클릭시
+                    print('$memo : 클릭 됨');
+                  },
+                );
+              },
+            ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
