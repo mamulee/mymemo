@@ -74,6 +74,9 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           // + 버튼 클릭시 메모 생성 및 수정 페이지로 이동
           String memo = ''; // 빈 메모 내용 추가
+          setState(() {
+            memoList.add(memo);
+          }); // 메모 추가하면서 화면 새로고침
           Navigator.push(
             context,
             MaterialPageRoute(
