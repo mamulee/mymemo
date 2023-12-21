@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -76,6 +77,10 @@ class _HomePageState extends State<HomePage> {
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      trailing: Text(memo.updatedAt == null
+                          ? ""
+                          : DateFormat('yyyy-MM-dd HH:mm:ss')
+                              .format(memo.updatedAt!)),
                       onTap: () {
                         // 아이템 클릭시
                         Navigator.push(
