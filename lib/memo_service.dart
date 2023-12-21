@@ -8,16 +8,24 @@ import 'main.dart';
 class Memo {
   Memo({
     required this.content,
+    this.isPinned = false,
   });
 
   String content;
+  bool isPinned;
 
   Map toJson() {
-    return {'content': content};
+    return {
+      'content': content,
+      'isPinned': isPinned,
+    };
   }
 
   factory Memo.fromJson(json) {
-    return Memo(content: json['content']);
+    return Memo(
+      content: json['content'],
+      isPinned: json['isPinned'] ?? false,
+    );
   }
 }
 
@@ -42,6 +50,29 @@ class MemoService extends ChangeNotifier {
   updateMemo({required int index, required String content}) {
     Memo memo = memoList[index];
     memo.content = content;
+    notifyListeners();
+    saveMemoList();
+  }
+
+  pinMemo({required int index}) {
+    Memo memo = memoList[index];
+    memo.isPinned = !memo.isPinned;
+    memoList.sort((a, b) {
+      // isPinned이 true인 요소가 먼저 나오도록 정렬
+      if (a.isPinned && !b.isPinned) {
+        return -1; // a를 더 앞으로 배치
+      } else if (!a.isPinned && b.isPinned) {
+        return 1; // b를 더 앞으로 배치
+      } else {
+        return 0; // 순서 변경 없음
+      }
+    });
+    // 답안
+    // memoList = [
+    //   ...memoList.where((element) => element.isPinned),
+    //   ...memoList.where((element) => !element.isPinned)
+    // ];
+
     notifyListeners();
     saveMemoList();
   }
